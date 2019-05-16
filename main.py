@@ -37,7 +37,7 @@ observations
 
 out = Path('out')
 out.mkdir(exist_ok=True)
-tidy.drop_duplicates().to_csv(out / 'observations.csv', index = False)
+observations.drop_duplicates().to_csv(out / 'observations.csv', index = False)
 
 # +
 scraper.dataset.family = 'health'
