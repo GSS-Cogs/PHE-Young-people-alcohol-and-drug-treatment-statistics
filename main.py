@@ -35,4 +35,15 @@ observations = pd.concat(process_tab(f"{t[:len('1.1.1')]}.py") for t in tabs.key
 
 observations
 
+out = Path('out')
+out.mkdir(exist_ok=True)
+tidy.drop_duplicates().to_csv(out / 'observations.csv', index = False)
 
+# +
+scraper.dataset.family = 'health'
+scraper.dataset.theme = THEME['health-social-care']
+with open(out / 'dataset.trig', 'wb') as metadata:
+    metadata.write(scraper.generate_trig())
+
+schema = CSVWSchema('https://ons-opendata.github.io/ref_alcohol/')
+schema.create(out / 'observations.csv', out / 'observations.csv-schema.json')
