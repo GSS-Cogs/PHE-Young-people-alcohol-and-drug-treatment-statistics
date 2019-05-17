@@ -33,7 +33,11 @@ def process_tab(t):
 observations = pd.concat(process_tab(f"{t[:len('1.1.1')]}.py") for t in tabs.keys() if t != 'Index')
 # -
 
-observations
+observations['Period'] = observations['Period'].map(
+    lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
+
+
+observations.rename(columns={'Substance': 'Substance type'}, inplace=True)
 
 out = Path('out')
 out.mkdir(exist_ok=True)
