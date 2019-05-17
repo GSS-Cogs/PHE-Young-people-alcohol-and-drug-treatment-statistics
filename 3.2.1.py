@@ -45,11 +45,29 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = 'Ethnicity/' + new_table['Basis of treatment']
-
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Ethnicity/Total' : 'Ethnicity/All' 
+        'Ethnicity':'ethnicity',
+        'White British':'ethnicity/white-british',
+        'Other White':'ethnicity/other-white',
+        'Not Stated':'ethnicity/not-stated',
+        'White Irish':'ethnicity/white-irish',
+        'Indian':'ethnicity/indian',
+        'Caribbean':'ethnicity/caribbean',
+        'White and black Caribbean':'ethnicity/white-and-black-caribbean',
+        'Pakistani':'ethnicity/pakistani',
+        'Other Asian':'ethnicity/other-asian',
+        'Other':'ethnicity/other',
+        'Other black':'ethnicity/other-black',
+        'African':'ethnicity/african',
+        'Other Mixed':'ethnicity/other-mixed',
+        'Bangladeshi':'ethnicity/bangladeshi',
+        'White and Asian':'ethnicity/white-and-asian',
+        'White and black African':'ethnicity/white-and-black-african',
+        'Chinese':'ethnicity/chinese',
+        'Unknown':'ethnicity/unknown',
+        'Inconsistent/missing':'ethnicity/inconsistent/missing',
+        'Total':'ethnicity/total'        
         }.get(x, x))
 
 new_table['Period'] = '2017-18'

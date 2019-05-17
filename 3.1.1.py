@@ -42,11 +42,11 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = 'Ag/' + new_table['Basis of treatment']
+new_table['Basis of treatment'] = 'age/' + new_table['Basis of treatment']
 
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Ag/Total clients' : 'Ag/All years' 
+        'age/Total clients' : 'age/total' 
         }.get(x, x))
 
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
