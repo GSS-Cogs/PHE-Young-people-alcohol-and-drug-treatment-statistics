@@ -47,14 +47,26 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
     lambda x: {
-        'Total new presentations' : 'All years' 
+        'Total new presentations' : 'all-years',
+        'Under 141' : 'under-14'
+        }.get(x, x))
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+    lambda x: {
+        'Total new presentations' : 'total-new-presentations',
+        'Sexual exploitation' : 'sexual-exploitation'
         }.get(x, x))
 
 new_table['Clients in treatment'] = new_table['Clients in treatment'].str.rstrip('1')
 
+new_table['Clients in treatment'] =  'age-' + new_table['Clients in treatment']
+
 new_table['Basis of treatment'] = new_table['Basis of treatment'] + '/' + new_table['sex']
 
-new_table['Clients in treatment'] =  'Ag/' + new_table['Clients in treatment']
+new_table['Basis of treatment'] = new_table['Basis of treatment'] + '-' + new_table['Clients in treatment']
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+new_table['Clients in treatment'] = new_table['Clients in treatment'].str.lower()
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'

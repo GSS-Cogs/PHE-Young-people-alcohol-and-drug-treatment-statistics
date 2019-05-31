@@ -45,12 +45,33 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
+new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Total (episodes)' : 'All referrals' 
-        }.get(x, x))
+        'total (episodes)' : 'all',
+         'a&e' : 'a-and-e',
+        'youth / criminal justice total' : 'youth-criminal-justice-total',        
+        'relative, family, friend or concerned other' : 'relative-family-friend-or-concerned-other' ,
+       'self, family & friends total' : 'self-family-and-friends-total', 
+        'mainstream education' : 'mainstream-education', 
+        'alternative education':'alternative-education',
+        'education service and other':'education-service-and-other',
+        'yp secure estate':'yp-secure-estate',
+        'children and family services':'children-and-family-services',
+        'social services':'social-services',
+        'relative-family-friend-or-concerned-other':'relative-family-friend-or-concerned-other',
+        'self-family-and-friends-total':'self-family-and-friends-total',
+        'school nurse':'school-nurse',
+        'yp housing':'yp-housing',
+        'education total':'education-total',
+        'other':'other',
+        'looked after child services':'looked-after-child-services',
+        'social care total':'social-care-total',
+        'substance misuse total':'substance-misuse-total',
+        'health total':'health-total'}.get(x, x))
 
-new_table['Basis of treatment'] = 'Referral source/' + new_table['Basis of treatment']
+new_table['Basis of treatment'] = 'referral-source/' + new_table['Basis of treatment']
 
 new_table['Clients in treatment'] = 'All young clients'
 
@@ -58,3 +79,5 @@ new_table['Period'] = '2017-18'
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 
 new_table
+
+

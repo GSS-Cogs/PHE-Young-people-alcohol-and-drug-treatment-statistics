@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -47,10 +48,16 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Total' : 'All' 
-        }.get(x, x))
+        'Total' : 'total',
+        'Living with parents or other relatives':'living-with-parents-or-other-relatives',
+        'YP living in care':'young-people-living-in-care',
+        'YP supported housing':'young-people-supported-housing',
+        'Independent – settled accommodation / no housing problem':'independent-settled-accommodation-no-housing-problem',
+        'Independent – unsettled accommodation / housing problem':'independent-unsettled-accommodation-housing-problem',
+        'Independent – no fixed abode':'independent-no-fixed-abode',
+        'YP living in secure care':'young-people-living-in-secure-care'}.get(x, x))
 
-new_table['Basis of treatment'] = 'Accommodation status/' + new_table['Basis of treatment']
+new_table['Basis of treatment'] = 'accommodation-status/' + new_table['Basis of treatment']
 
 new_table['Clients in treatment'] = 'All young clients'
 

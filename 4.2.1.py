@@ -29,7 +29,7 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace().is_number()
 
 Dimensions = [
             HDim(intervention,'Clients in treatment',DIRECTLY,LEFT),
-            HDimConst('Basis of treatment','Change intervention'),
+            HDimConst('Basis of treatment','intervention-received'),
             HDimConst('Measure Type','Count'),
             HDimConst('Unit','People')            
             ]
@@ -42,10 +42,18 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
+new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
+    lambda x: {
+        'Inpatient detoxification' : 'inpatient-detoxification',
+        'Other YP intervention' : 'other-yp-intervention'
+        }.get(x, x))
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'] + '/' + new_table['Clients in treatment']
+
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 
-new_table.tail()
+new_table
 
 

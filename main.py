@@ -38,6 +38,7 @@ observations['Period'] = observations['Period'].map(
 
 
 observations.rename(columns={'Substance': 'Substance type'}, inplace=True)
+observations.drop("Clients in treatment", axis=1)
 
 out = Path('out')
 out.mkdir(exist_ok=True)
@@ -51,3 +52,6 @@ with open(out / 'dataset.trig', 'wb') as metadata:
 
 schema = CSVWSchema('https://ons-opendata.github.io/ref_alcohol/')
 schema.create(out / 'observations.csv', out / 'observations.csv-schema.json')
+# -
+
+

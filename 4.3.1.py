@@ -41,12 +41,15 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] =  'Length of Latest Episode' 
-
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
     lambda x: {
-        'Total' : 'All episodes', 
-        }.get(x, x))
+        'Total' : 'total', 
+        '0 (zero) to 12 weeks' : '0-to-12-weeks',
+        '13 to 26 weeks' : '13-to-26-weeks',
+        '27 to 52 weeks' : '27-to-52-weeks',
+        'Longer than 52 weeks' : 'longer-than-52-weeks'}.get(x, x))
+
+new_table['Basis of treatment'] =  'length-of-latest-episode' + '/' + new_table['Clients in treatment']
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'

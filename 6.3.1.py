@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -43,9 +44,23 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] =  'Treatment for other drug use, excluding cannabis and alcohol' 
+new_table['Basis of treatment'] =  'treatment-for-other-drug-use-excluding-cannabis-and-alcohol' 
 
 new_table['Substance'] = new_table['Substance'].str.rstrip('1')
+
+new_table['Substance'] = new_table['Substance'].str.lower()
+
+new_table['Substance'] = new_table['Substance'].map(
+    lambda x: {
+        'nps (any) ' : 'nps',
+        'nps - predominantly stimulant ' : 'nps-predominantly-stimulant',
+        'nps - predominantly hallucinogenic ' : 'nps-predominantly-hallucinogenic',
+        'nps - predominantly dissociative ' : 'nps-predominantly-dissociative',
+        'nps - predominantly sedative/opioid ' : 'nps-predominantly-sedative-or-opioid',
+        'nps - predominantly cannabinoid ' : 'nps-predominantly-cannabinoid', 
+        'nps – other ' : 'nps–other' , 
+        'solvents\xa0' : 'solvents'
+        }.get(x, x))
 
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 

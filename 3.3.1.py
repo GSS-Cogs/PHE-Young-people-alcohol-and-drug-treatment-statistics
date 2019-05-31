@@ -46,20 +46,27 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = 'Therapy'
-
-new_table['Substance'] = new_table['Substance'].map(
-    lambda x: {
-        'Total including missing' : 'All' 
-        }.get(x, x))
-
 new_table['Clients in treatment'] = new_table['Clients in treatment'].str.rstrip('^1')
 new_table['Substance'] = new_table['Substance'].str.rstrip('234')
 
+new_table['Substance'] = new_table['Substance'].str.lower()
+
+new_table['Substance'] = new_table['Substance'].map(
+    lambda x: {
+        'total including missing' : 'total',
+        'new psychoactive substances' : 'new-psychoactive-substances', 
+        'other opiates' : 'other-opiates', 
+       'nicotine (adjunctive use only)' : 'nicotine'      
+        }.get(x, x))
+
+new_table['Clients in treatment'] = new_table['Clients in treatment'].str.lower()
+
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
     lambda x: {
-        'Total' : 'All' 
+        'Total' : 'total',
         }.get(x, x))
+
+new_table['Basis of treatment'] = 'substance-use/' + new_table['Clients in treatment']
 
 new_table['Period'] = '2017-18'
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]

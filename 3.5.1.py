@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -45,12 +46,21 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
+new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Total' : 'All' 
-        }.get(x, x))
+        'Total' : 'All',
+        'mainstream education':'mainstream-education',
+        'not in employment or education or training (neet)':'not-in-employment-or-education-or-training-',
+        'apprenticeship or training':'apprenticeship-or-training',
+        'persistent absentee or excluded':'persistent-absentee-or-excluded',
+        'economically inactive – health issue or caring role':'economically-inactive-health-issue-or-caring-role',
+        'voluntary work':'voluntary-work',
+        ' alternative education':'alternative-education',
+        ' total new presentations':'total-new-presentations'}.get(x, x))
 
-new_table['Basis of treatment'] = 'Education and employment status/' + new_table['Basis of treatment']
+new_table['Basis of treatment'] = 'education-and-employment-status/' + new_table['Basis of treatment']
 
 new_table['Clients in treatment'] = 'All young clients'
 
@@ -58,5 +68,3 @@ new_table['Period'] = '2017-18'
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 
 new_table
-
-

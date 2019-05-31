@@ -41,7 +41,14 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = 'Reported multiple vulnerabilities' +'/'+ new_table['Basis of treatment']
+new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+    lambda x: { 'four or more' : 'four-or-more',
+               'total new presentations' : 'total'
+       }.get(x, x))
+
+new_table['Basis of treatment'] = 'reported-vulnerabilities' +'/'+ new_table['Basis of treatment']
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'

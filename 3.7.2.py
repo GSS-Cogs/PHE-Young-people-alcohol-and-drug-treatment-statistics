@@ -42,14 +42,35 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = 'Vulnerability' +'/'+ new_table['Basis of treatment']
-
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
     lambda x: {
-        'Female' : 'F', 
-        'Male' : 'M',
-        'Persons' : 'T'
+        'Female' : 'female', 
+        'Male' : 'male',
+        'Persons' : 'total'
         }.get(x, x))
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+    lambda x: {
+        'early onset of substance misuse':'early-onset-of-substance-misuse',
+        'poly drug user':'poly-drug-user',
+        'antisocial behaviour':'antisocial-behaviour',
+        'mental health treatment need':'mental-health-treatment-need',
+        'affected by others substance misuse':'affected-by-others-substance-misuse',
+        'affected by domestic abuse':'affected-by-domestic-abuse',
+        'looked after child':'looked-after-child',
+        'child in need':'child-in-need',
+        'child protection plan':'child-protection-plan',
+        'sexual exploitation':'sexual-exploitation',
+        'high risk alcohol user':'high-risk-alcohol-user',
+        'opiate and/or crack use':'opiate-and/or-crack-use',
+        'pregnant and/or parent':'pregnant-and/or-parent',
+        'housing problem':'housing-problem',
+        'injecting':'injecting',
+        'total new presentations':'total-new-presentations'}.get(x, x))
+
+new_table['Basis of treatment'] = 'vulnerability' +'/'+ new_table['Basis of treatment'] + '-' + new_table['Clients in treatment']
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'

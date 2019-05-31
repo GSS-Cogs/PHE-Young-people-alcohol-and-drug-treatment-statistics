@@ -45,15 +45,24 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
     lambda x: {
-        'Total' : 'All weeks'
+        'Total' : 'all-weeks',
+        '3 weeks or under' : '3-weeks-or-under',
+        'Over 3 weeks' : 'over-3-weeks'
         }.get(x, x))
 
-new_table['Basis of treatment'] =  'Waiting times/' + new_table['Basis of treatment'] 
+new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
+    lambda x: {
+        'First Intervention' : 'first-intervention' , 
+        'Subsequent Intervention' : 'subsequent-intervention',
+        'Total Interventions' : 'total-interventions'
+        }.get(x, x))
+
+new_table['Basis of treatment'] =  'waiting-time/' + new_table['Clients in treatment'] + '-' + new_table['Basis of treatment'] 
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 
-new_table.tail()
+new_table
 
 

@@ -44,9 +44,11 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] =  'Treatment by primary substance' 
+new_table['Basis of treatment'] =  'treatment-by-primary-substance' 
 
 new_table['Substance'] = new_table['Substance'].str.rstrip('12')
+
+new_table['Substance'] = new_table['Substance'].str.lower()
 
 new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
 

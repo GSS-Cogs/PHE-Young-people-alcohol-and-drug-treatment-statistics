@@ -46,10 +46,24 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
     lambda x: {
-        'Female' : 'F',
-        'Male' : 'M',
-        'Total' : 'T'
+        'Female' : 'female',
+        'Male' : 'male',
+        'Total' : 'total'
         }.get(x, x))
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+    lambda x: {
+        'Engaged with community mental health team or other mental health services':'mental-health-treatment-need/community-or-other-mental-health-servicess',
+        'Mental health treatment from GP':'mental-health-treatment-need/gp',
+        'NICE recommended mental health treatment':'nice-recommended-mental-health-treatment',
+        'Engaged with Improving Access to Psychological Therapies (IAPT)':'mental-health-treatment-need/improving-access-to-psychological-therapies-iapt',
+        'Identified space in a health based place of safety for mental health crises':'mental-health-treatment-need/identified-space-in-a-health-based-place-of-safety-for-mental-health-crises',
+        'Total individuals receiving any form of mental health treatment':'mental-health-treatment-need/total-individuals-receiving-any-treatment-for-mental-health',
+        'Mental health treatment need identified but no treatment received':'mental-health-treatment-need/no-treatment-received-for-a-mental-health-treatment-need',
+        'Total individuals with mental health treatment need':'mental-health-treatment-need/total-individuals-receiving-any-treatment-for-mental-health',
+}.get(x, x))
+
+new_table['Basis of treatment'] = new_table['Basis of treatment'] + '-' + new_table['Clients in treatment']
 
 new_table['Period'] = '2017-18'
 new_table['Substance'] = 'All'
