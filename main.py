@@ -38,7 +38,7 @@ observations['Period'] = observations['Period'].map(
 
 
 observations.rename(columns={'Substance': 'Substance type'}, inplace=True)
-observations.drop("Clients in treatment", axis=1)
+observations = observations.drop("Clients in treatment", axis=1)
 
 out = Path('out')
 out.mkdir(exist_ok=True)
