@@ -50,7 +50,7 @@ scraper.dataset.theme = THEME['health-social-care']
 with open(out / 'dataset.trig', 'wb') as metadata:
     metadata.write(scraper.generate_trig())
 
-schema = CSVWMetadata('https://ons-opendata.github.io/ref_alcohol/')
+schema = CSVWMetadata('https://gss-cogs.github.io/ref_alcohol/')
 schema.create(out / 'observations.csv', out / 'observations.csv-schema.json')
 # -
 
