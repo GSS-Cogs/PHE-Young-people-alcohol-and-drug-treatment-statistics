@@ -60,7 +60,7 @@ new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
         'Identified space in a health based place of safety for mental health crises':'mental-health-treatment-need/identified-space-in-a-health-based-place-of-safety-for-mental-health-crises',
         'Total individuals receiving any form of mental health treatment':'mental-health-treatment-need/total-individuals-receiving-any-treatment-for-mental-health',
         'Mental health treatment need identified but no treatment received':'mental-health-treatment-need/no-treatment-received-for-a-mental-health-treatment-need',
-        'Total individuals with mental health treatment need':'mental-health-treatment-need/total-individuals-receiving-any-treatment-for-mental-health',
+        'Total individuals with mental health treatment need':'mental-health-treatment-need/total-individuals-needing-mental-health-treatment',
 }.get(x, x))
 
 new_table['Basis of treatment'] = new_table['Basis of treatment'] + '-' + new_table['Clients in treatment']
