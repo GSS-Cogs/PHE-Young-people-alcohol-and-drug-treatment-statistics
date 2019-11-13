@@ -31,7 +31,7 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace()
 Dimensions = [
             HDimConst('Measure Type','Count'),
             HDim(treatment,'Treatment exit reason',DIRECTLY,LEFT),
-            HDimConst('Substance type','All'),
+            HDimConst('Substance type','total'),
             HDim(period,'Period',DIRECTLY,ABOVE),
             HDimConst('Unit','People')            
             ]

@@ -55,7 +55,7 @@ new_table['Substance type'] = new_table['Substance type'].str.lower()
 
 new_table['Substance type'] = new_table['Substance type'].map(
     lambda x: {
-        'total including missing' : 'all',
+        'total including missing' : 'total',
         'new psychoactive substances' : 'new-psychoactive-substances', 
         'other opiates' : 'other-opiates', 
        'nicotine (adjunctive use only)' : 'nicotine'      

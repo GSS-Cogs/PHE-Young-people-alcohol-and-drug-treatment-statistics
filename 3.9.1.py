@@ -65,7 +65,7 @@ new_table['Mental health treatment need'] = new_table['Mental health treatment n
 }.get(x, x))
 
 new_table['Period'] = '2017-18'
-new_table['Substance type'] = 'All'
+new_table['Substance type'] = 'total'
 new_table['Age'] = 'all young clients'
 new_table = new_table[['Period','Age','Substance type','Mental health treatment need','Sex','Measure Type','Value','Unit']]
 

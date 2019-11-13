@@ -63,7 +63,7 @@ new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
 new_table['Age'] = new_table['Age'].str.lower()
 
 new_table['Period'] = '2017-18'
-new_table['Substance type'] = 'All'
+new_table['Substance type'] = 'total'
 new_table = new_table[['Period','Age','Substance type','Basis of treatment','Sex','Measure Type','Value','Unit']]
 
 new_table['Period'] = new_table['Period'].map(

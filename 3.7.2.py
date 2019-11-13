@@ -44,9 +44,9 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Vulnerability'] = new_table['Vulnerability'].map(
     lambda x: {
-        'Female' : 'female', 
-        'Male' : 'male',
-        'Persons' : 'all'
+        'Female' : 'F', 
+        'Male' : 'M',
+        'Persons' : 'T'
         }.get(x, x))
 
 new_table['Vulnerability'] = new_table['Vulnerability'].str.lower()
@@ -71,14 +71,12 @@ new_table['Vulnerability'] = new_table['Vulnerability'].map(
         'total new presentations':'total-new-presentations'}.get(x, x))
 
 new_table['Period'] = '2017-18'
-new_table['Substance type'] = 'All'
+new_table['Substance type'] = 'total'
 new_table['Age'] = 'All young clients'
 new_table = new_table[['Period','Age','Substance type','Vulnerability','Sex','Measure Type','Value','Unit']]
 
 new_table['Period'] = new_table['Period'].map(
     lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
-new_table['Sex'] = new_table['Sex'].map(
-    lambda x: 'F' if x == 'female' else ('M' if x == 'male' else 'T'))
 new_table
 
 # + {"endofcell": "--"}

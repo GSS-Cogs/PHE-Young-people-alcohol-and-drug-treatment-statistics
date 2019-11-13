@@ -32,7 +32,7 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace().is_number()
 observations = observations - noobs1 - noobs2
 
 Dimensions = [
-            HDimConst('Substance type','All'),
+            HDimConst('Substance type','total'),
             HDim(education,'Education and employment status',DIRECTLY,LEFT),
             HDimConst('Measure Type','Count'),
             HDimConst('Unit','People')            

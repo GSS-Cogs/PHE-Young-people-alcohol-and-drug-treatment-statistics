@@ -49,7 +49,7 @@ new_table['Age'] = new_table['Age'].map(
         'Under 12' : 'under-12', 
         '2013-12-01' : '12-13'}.get(x, x))
 
-new_table['Substance type'] = 'All'
+new_table['Substance type'] = 'total'
 new_table = new_table[['Period','Age','Substance type','Measure Type','Value','Unit']]
 
 new_table['Period'] = new_table['Period'].map(
