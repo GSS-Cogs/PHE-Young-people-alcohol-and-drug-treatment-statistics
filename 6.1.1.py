@@ -52,13 +52,15 @@ new_table['Age'] = new_table['Age'].map(
 new_table['Substance type'] = 'All'
 new_table = new_table[['Period','Age','Substance type','Measure Type','Value','Unit']]
 
+new_table['Period'] = new_table['Period'].map(
+    lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
 new_table
 
 # + {"endofcell": "--"}
 destinationFolder = Path('out')
 destinationFolder.mkdir(exist_ok=True, parents=True)
 
-TAB_NAME = '6.1.1 Trends of Age'
+TAB_NAME = '6.1.1'
 
 new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
 

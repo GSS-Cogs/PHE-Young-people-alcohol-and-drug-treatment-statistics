@@ -62,6 +62,8 @@ new_table['Substance type'] = 'All'
 new_table['Age'] = 'all young clients'
 new_table = new_table[['Period','Age','Substance type','Waiting time','Intervention','Measure Type','Value','Unit']]
 
+new_table['Period'] = new_table['Period'].map(
+    lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
 new_table
 
 # + {"endofcell": "--"}

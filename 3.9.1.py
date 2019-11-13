@@ -47,9 +47,9 @@ new_table['Value'] = new_table['Value'].astype(int)
 
 new_table['Sex'] = new_table['Sex'].map(
     lambda x: {
-        'Female' : 'female',
-        'Male' : 'male',
-        'Total' : 'all'
+        'Female' : 'F',
+        'Male' : 'M',
+        'Total' : 'T'
         }.get(x, x))
 
 new_table['Mental health treatment need'] = new_table['Mental health treatment need'].map(
@@ -69,13 +69,15 @@ new_table['Substance type'] = 'All'
 new_table['Age'] = 'all young clients'
 new_table = new_table[['Period','Age','Substance type','Mental health treatment need','Sex','Measure Type','Value','Unit']]
 
+new_table['Period'] = new_table['Period'].map(
+    lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
 new_table
 
 # + {"endofcell": "--"}
 destinationFolder = Path('out')
 destinationFolder.mkdir(exist_ok=True, parents=True)
 
-TAB_NAME = '3.9.1 Mental health treatment'
+TAB_NAME = '3.9.1'
 
 new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
 
