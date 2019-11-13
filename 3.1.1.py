@@ -64,6 +64,8 @@ new_table = new_table[['Period','Age','Substance type','Sex','Measure Type','Val
 
 new_table['Period'] = new_table['Period'].map(
     lambda x: f'gregorian-interval/{str(x)[:4]}-03-31T00:00:00/P1Y')
+new_table['Sex'] = new_table['Sex'].map(
+    lambda x: 'F' if x == 'female' else ('M' if x == 'male' else 'T'))
 new_table
 
 # + {"endofcell": "--"}
