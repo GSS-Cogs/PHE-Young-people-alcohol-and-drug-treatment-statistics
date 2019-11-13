@@ -31,13 +31,14 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace().is_number()
 observations = observations - noobs1 - noobs2
 
 Dimensions = [
-            HDim(ethnicity,'Basis of treatment',DIRECTLY,LEFT),
-            HDimConst('Clients in treatment','All young clients'),
+            HDim(ethnicity,'Ethnicity',DIRECTLY,LEFT),
+            HDimConst('Age','All young clients'),
             HDimConst('Measure Type', 'Count'),
             HDimConst('Unit','People')            
             ]
 c1 = ConversionSegment(observations, Dimensions, processTIMEUNIT=True)
 new_table = c1.topandas()
+savepreviewhtml(c1, fname="Preview.html")
 
 import numpy as np
 new_table['OBS'].replace('', np.nan, inplace=True)
@@ -45,35 +46,58 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+new_table['Ethnicity'] = new_table['Ethnicity'].map(
     lambda x: {
         'Ethnicity':'ethnicity',
-        'White British':'ethnicity/white-british',
-        'Other White':'ethnicity/other-white',
-        'Not Stated':'ethnicity/not-stated',
-        'White Irish':'ethnicity/white-irish',
-        'Indian':'ethnicity/indian',
-        'Caribbean':'ethnicity/caribbean',
-        'White and black Caribbean':'ethnicity/white-and-black-caribbean',
-        'Pakistani':'ethnicity/pakistani',
-        'Other Asian':'ethnicity/other-asian',
-        'Other':'ethnicity/other',
-        'Other black':'ethnicity/other-black',
-        'African':'ethnicity/african',
-        'Other Mixed':'ethnicity/other-mixed',
-        'Bangladeshi':'ethnicity/bangladeshi',
-        'White and Asian':'ethnicity/white-and-asian',
-        'White and black African':'ethnicity/white-and-black-african',
-        'Chinese':'ethnicity/chinese',
-        'Unknown':'ethnicity/unknown',
-        'Inconsistent/missing':'ethnicity/inconsistent/missing',
-        'Total':'ethnicity/total'        
+        'White British':'white-british',
+        'Other White':'other-white',
+        'Not Stated':'not-stated',
+        'White Irish':'white-irish',
+        'Indian':'indian',
+        'Caribbean':'caribbean',
+        'White and black Caribbean':'white-and-black-caribbean',
+        'Pakistani':'pakistani',
+        'Other Asian':'other-asian',
+        'Other':'other',
+        'Other black':'other-black',
+        'African':'african',
+        'Other Mixed':'other-mixed',
+        'Bangladeshi':'bangladeshi',
+        'White and Asian':'white-and-asian',
+        'White and black African':'white-and-black-african',
+        'Chinese':'chinese',
+        'Unknown':'unknown',
+        'Inconsistent/missing':'inconsistent/missing',
+        'Total':'all'        
         }.get(x, x))
 
 new_table['Period'] = '2017-18'
-new_table['Substance'] = 'All'
-new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
+new_table['Substance type'] = 'All'
+new_table = new_table[['Period','Age','Substance type','Ethnicity','Measure Type','Value','Unit']]
 
 new_table
 
+# + {"endofcell": "--"}
+destinationFolder = Path('out')
+destinationFolder.mkdir(exist_ok=True, parents=True)
 
+TAB_NAME = '3.2.1 Ethnicity'
+
+new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
+
+# # +
+from gssutils.metadata import THEME
+
+scraper.dataset.family = 'health'
+scraper.dataset.theme = THEME['health-social-care']
+#scraper.set_base_uri('http://gss-data.org.uk')
+#scraper.set_dataset_id(f'health/PHE-Young-people-alcohol-and-drug-treatment-statistics/{TAB_NAME}')
+with open(destinationFolder / f'{TAB_NAME}.csv-metadata.trig', 'wb') as metadata:
+    metadata.write(scraper.generate_trig())
+# -
+
+schema = CSVWMetadata('https://gss-cogs.github.io/ref_alcohol/')
+schema.create(destinationFolder / f'{TAB_NAME}.csv', destinationFolder / f'{TAB_NAME}.csv-schema.json')
+
+new_table
+# --

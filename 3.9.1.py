@@ -30,13 +30,14 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace().is_number() - n
 sex = obs.shift(0,-1)
 
 Dimensions = [
-            HDim(basis,'Basis of treatment',DIRECTLY,LEFT),
-            HDim(sex,'Clients in treatment',DIRECTLY, ABOVE),
+            HDim(basis,'Mental health treatment need',DIRECTLY,LEFT),
+            HDim(sex,'Sex',DIRECTLY, ABOVE),
             HDimConst('Measure Type','Count'),
             HDimConst('Unit','People')            
             ]
 c1 = ConversionSegment(observations, Dimensions, processTIMEUNIT=True)
 new_table = c1.topandas()
+savepreviewhtml(c1, fname="Preview.html")
 
 import numpy as np
 new_table['OBS'].replace('', np.nan, inplace=True)
@@ -44,31 +45,57 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Clients in treatment'] = new_table['Clients in treatment'].map(
+new_table['Sex'] = new_table['Sex'].map(
     lambda x: {
         'Female' : 'female',
         'Male' : 'male',
-        'Total' : 'total'
+        'Total' : 'all'
         }.get(x, x))
 
-new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+new_table['Mental health treatment need'] = new_table['Mental health treatment need'].map(
     lambda x: {
-        'Engaged with community mental health team or other mental health services':'mental-health-treatment-need/community-or-other-mental-health-servicess',
-        'Mental health treatment from GP':'mental-health-treatment-need/gp',
+        'Engaged with community mental health team or other mental health services':'community-or-other-mental-health-servicess',
+        'Mental health treatment from GP':'gp',
         'NICE recommended mental health treatment':'nice-recommended-mental-health-treatment',
-        'Engaged with Improving Access to Psychological Therapies (IAPT)':'mental-health-treatment-need/improving-access-to-psychological-therapies-iapt',
-        'Identified space in a health based place of safety for mental health crises':'mental-health-treatment-need/identified-space-in-a-health-based-place-of-safety-for-mental-health-crises',
-        'Total individuals receiving any form of mental health treatment':'mental-health-treatment-need/total-individuals-receiving-any-treatment-for-mental-health',
-        'Mental health treatment need identified but no treatment received':'mental-health-treatment-need/no-treatment-received-for-a-mental-health-treatment-need',
-        'Total individuals with mental health treatment need':'mental-health-treatment-need/total-individuals-needing-mental-health-treatment',
+        'Engaged with Improving Access to Psychological Therapies (IAPT)':'improving-access-to-psychological-therapies-iapt',
+        'Identified space in a health based place of safety for mental health crises':'identified-space-in-a-health-based-place-of-safety-for-mental-health-crises',
+        'Total individuals receiving any form of mental health treatment':'total-individuals-receiving-any-treatment-for-mental-health',
+        'Mental health treatment need identified but no treatment received':'no-treatment-received-for-a-mental-health-treatment-need',
+        'Total individuals with mental health treatment need':'total-individuals-needing-mental-health-treatment',
 }.get(x, x))
 
-new_table['Basis of treatment'] = new_table['Basis of treatment'] + '-' + new_table['Clients in treatment']
-
 new_table['Period'] = '2017-18'
-new_table['Substance'] = 'All'
-new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
+new_table['Substance type'] = 'All'
+new_table['Age'] = 'all young clients'
+new_table = new_table[['Period','Age','Substance type','Mental health treatment need','Sex','Measure Type','Value','Unit']]
 
 new_table
+
+# + {"endofcell": "--"}
+destinationFolder = Path('out')
+destinationFolder.mkdir(exist_ok=True, parents=True)
+
+TAB_NAME = '3.9.1 Mental health treatment'
+
+new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
+
+# # +
+from gssutils.metadata import THEME
+
+scraper.dataset.family = 'health'
+scraper.dataset.theme = THEME['health-social-care']
+#scraper.set_base_uri('http://gss-data.org.uk')
+#scraper.set_dataset_id(f'health/PHE-Young-people-alcohol-and-drug-treatment-statistics/{TAB_NAME}')
+with open(destinationFolder / f'{TAB_NAME}.csv-metadata.trig', 'wb') as metadata:
+    metadata.write(scraper.generate_trig())
+# -
+
+schema = CSVWMetadata('https://gss-cogs.github.io/ref_alcohol/')
+schema.create(destinationFolder / f'{TAB_NAME}.csv', destinationFolder / f'{TAB_NAME}.csv-schema.json')
+
+new_table
+# --
+
+new_table['Mental health treatment need'].unique().tolist()
 
 

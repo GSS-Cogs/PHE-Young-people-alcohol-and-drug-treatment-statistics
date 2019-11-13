@@ -32,8 +32,8 @@ observations = obs.fill(DOWN).is_not_blank().is_not_whitespace().is_number()
 observations = observations - noobs1 - noobs2
 
 Dimensions = [
-            HDimConst('Substance','All'),
-            HDim(education,'Basis of treatment',DIRECTLY,LEFT),
+            HDimConst('Substance type','All'),
+            HDim(education,'Education and employment status',DIRECTLY,LEFT),
             HDimConst('Measure Type','Count'),
             HDimConst('Unit','People')            
             ]
@@ -46,11 +46,12 @@ new_table.dropna(subset=['OBS'], inplace=True)
 new_table.rename(columns={'OBS': 'Value'}, inplace=True)
 new_table['Value'] = new_table['Value'].astype(int)
 
-new_table['Basis of treatment'] = new_table['Basis of treatment'].str.lower()
+new_table['Education and employment status'] = new_table['Education and employment status'].str.lower()
+new_table['Age'] = 'All young clients'
 
-new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
+new_table['Education and employment status'] = new_table['Education and employment status'].map(
     lambda x: {
-        'Total' : 'All',
+        'Total' : 'all',
         'mainstream education':'mainstream-education',
         'not in employment or education or training (neet)':'not-in-employment-or-education-or-training-',
         'apprenticeship or training':'apprenticeship-or-training',
@@ -60,11 +61,34 @@ new_table['Basis of treatment'] = new_table['Basis of treatment'].map(
         ' alternative education':'alternative-education',
         ' total new presentations':'total-new-presentations'}.get(x, x))
 
-new_table['Basis of treatment'] = 'education-and-employment-status/' + new_table['Basis of treatment']
-
-new_table['Clients in treatment'] = 'All young clients'
-
 new_table['Period'] = '2017-18'
-new_table = new_table[['Period','Basis of treatment','Substance','Clients in treatment','Measure Type','Value','Unit']]
+new_table = new_table[['Period','Age','Substance type','Education and employment status','Measure Type','Value','Unit']]
 
 new_table
+
+# + {"endofcell": "--"}
+destinationFolder = Path('out')
+destinationFolder.mkdir(exist_ok=True, parents=True)
+
+TAB_NAME = '3.5.1 Education & Employment'
+
+new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
+
+# # +
+from gssutils.metadata import THEME
+
+scraper.dataset.family = 'health'
+scraper.dataset.theme = THEME['health-social-care']
+#scraper.set_base_uri('http://gss-data.org.uk')
+#scraper.set_dataset_id(f'health/PHE-Young-people-alcohol-and-drug-treatment-statistics/{TAB_NAME}')
+with open(destinationFolder / f'{TAB_NAME}.csv-metadata.trig', 'wb') as metadata:
+    metadata.write(scraper.generate_trig())
+# -
+
+schema = CSVWMetadata('https://gss-cogs.github.io/ref_alcohol/')
+schema.create(destinationFolder / f'{TAB_NAME}.csv', destinationFolder / f'{TAB_NAME}.csv-schema.json')
+
+new_table
+# --
+
+
