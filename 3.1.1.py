@@ -84,7 +84,7 @@ with open(destinationFolder / f'{TAB_NAME}.csv-metadata.trig', 'wb') as metadata
 # -
 
 schema = CSVWMetadata('https://gss-cogs.github.io/ref_alcohol/')
-schema.create(destinationFolder / f'{TAB_NAME}.csv', destinationFolder / f'{TAB_NAME}.csv-schema.json')
+schema.create(destinationFolder / f'{TAB_NAME}.csv', destinationFolder / f''{TAB_NAME}'.csv-schema.json')
 
 new_table
 # --
