@@ -68,7 +68,7 @@ new_table
 destinationFolder = Path('out')
 destinationFolder.mkdir(exist_ok=True, parents=True)
 
-TAB_NAME = '3.1.1 Age and Gender'
+TAB_NAME = '3.1.1'
 
 new_table.drop_duplicates().to_csv(destinationFolder / f'{TAB_NAME}.csv', index = False)
 
